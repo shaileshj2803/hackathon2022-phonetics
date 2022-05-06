@@ -23,7 +23,7 @@ namespace VoiceRecorder
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Computer computer = new Computer();
+            // Computer computer = new Computer();
             // lstBoxEmployeeRecorded.Items.Clear();
             lblMessage.Visible = false;
             lblMessage.Text = string.Empty;
@@ -88,7 +88,7 @@ namespace VoiceRecorder
             string[] files = Directory.GetFiles(_baseLocation);
             foreach (string file in files)
             {
-                var fileNamewithextension = Path.GetExtension(file);
+                var fileNamewithextension = Path.GetFileName(file);
                 string[] name = fileNamewithextension.Split('-');
                 var actualName = name[0].Replace("_", " ");
                 lstBoxEmployeeRecorded.Items.Add(actualName);
