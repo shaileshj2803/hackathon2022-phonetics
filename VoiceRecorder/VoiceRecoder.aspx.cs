@@ -6,15 +6,15 @@ using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.Services;
 using System.Collections.Generic;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.Devices;
 
 namespace VoiceRecorder
 {
-    public partial class VoiceRecoder : System.Web.UI.Page
+    public partial class VoiceRecoder : Page
     {
-
         [DllImport("winmm.dll", EntryPoint = "mciSendStringA")]
         private static extern int mciSendString(string lpstrCommand, string lpstrReturnString, int uReturnLength, int hwndCallback);
 
@@ -29,13 +29,30 @@ namespace VoiceRecorder
             lblMessage.Text = string.Empty;
         }
 
+    [WebMethod]
+    public static string Upload(string name, string encodedBlob)
+    {
+      try {
+        return "name:" + name + ", encodedBlob:" + encodedBlob;
+        //return "test";
+      }
+      catch (Exception ex) { 
+        return ex.ToString();
+      }
+    }
 
-        /// <summary>
-        /// Stop and Save Recording
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected void Btnsavestop_Click(object sender, EventArgs e)
+    //[WebMethod]
+    //public static string Upload(string userdata)
+    //{
+    //  return userdata;
+    //}
+
+    /// <summary>
+    /// Stop and Save Recording
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    protected void Btnsavestop_Click(object sender, EventArgs e)
         {
             try
             {
@@ -102,7 +119,7 @@ namespace VoiceRecorder
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected void ImageButton1_Click(object sender, System.Web.UI.ImageClickEventArgs e)
+        protected void ImageButton1_Click(object sender, ImageClickEventArgs e)
         {
             mciSendString("open new Type waveaudio Alias recsound", "", 0, 0);
             mciSendString("record recsound", "", 0, 0);
@@ -115,7 +132,7 @@ namespace VoiceRecorder
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected void ImageButton2_Click(object sender, System.Web.UI.ImageClickEventArgs e)
+        protected void ImageButton2_Click(object sender, ImageClickEventArgs e)
         {
             try
             {
