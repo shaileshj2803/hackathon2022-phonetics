@@ -29,32 +29,28 @@ namespace VoiceRecorder
             lblMessage.Text = string.Empty;
         }
 
-    [WebMethod]
-    public static string Upload(string name, string encodedBlob)
-    {
-      try {
-        System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() +" | Received: " + encodedBlob);
-        return "name:" + name + ", encodedBlob:" + encodedBlob;
+        [WebMethod]
+        public static string Upload(string name, string encodedBlob)
+        {
+          try {
+            System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString("yyyy-dd-MM HH:MM:ss ") + " | Received: " + encodedBlob);
         
-      }
-      catch (Exception ex) { 
-        System.Diagnostics.Debug.WriteLine(ex.Message);
-        return ex.Message;
-      }
-    }
+            // To-do: Persist the base64 encoded audio blob
 
-    //[WebMethod]
-    //public static string Upload(string userdata)
-    //{
-    //  return userdata;
-    //}
+            return "name:" + name + ", encodedBlob:" + encodedBlob;
+          }
+          catch (Exception ex) { 
+            System.Diagnostics.Debug.WriteLine(ex.Message);
+            return ex.Message;
+          }
+        }
 
-    /// <summary>
-    /// Stop and Save Recording
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    protected void Btnsavestop_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Stop and Save Recording
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void Btnsavestop_Click(object sender, EventArgs e)
         {
             try
             {

@@ -106,6 +106,12 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
     <script src="Scripts/recorder.js"></script>
     <script>
+        /**
+         * Copyright Mark Jivko (https://github.com/markjivko)
+         * Licensed under GPL-3.0
+         *
+         * Modified by Michael Cheng
+         */
         jQuery(document).ready(function () {
             var $ = jQuery;
             var myRecorder = {
@@ -153,27 +159,28 @@
                                     .attr('src', url);
 
                                 // Prepare the download link
-                                var downloadObject = $('<a>&#9660;</a>')
-                                    .attr('href', url)
-                                    .attr('download', new Date().toUTCString() + '.wav');
+                                //var downloadObject = $('<a>&#9660;</a>')
+                                //    .attr('href', url)
+                                //    .attr('download', new Date().toUTCString() + '.wav');
 
                                 // Wrap everything in a row
                                 var holderObject = $('<div class="row"></div>')
-                                    .append(audioObject)
-                                    .append(downloadObject);
+                                    .append(audioObject);
+                                //    .append(downloadObject);
 
-                                // Append to the list
-                                listObject.append(holderObject);
+                                // Replace in the list. Append if you want to keep previous recordings.
+                                listObject.html(holderObject);
 
-                                //Upload blob to server
+                                //Upload base64 encoded blob to server
                                 var reader = new FileReader();
                                 reader.readAsDataURL(blob);
                                 reader.onloadend = function () {
                                     var base64data = reader.result;
-                                    console.log(base64data);
+                                    //console.log(base64data);
                                     //var DTO = { 'userdata': 'Saran' };
+                                    var name = $("#firstname").val() + "_" + $("#lastname").val() + "-Recording.wav";
                                     var DTO = {
-                                        'name':'Mike',
+                                        'name': name,
                                         'encodedBlob': base64data
                                     };
                                     $.ajax({
@@ -184,7 +191,7 @@
                                         datatype: "json",
                                         success: function (result) {
                                             //do something
-                                            console.log("Successfully posted.")
+                                            console.log("Successfully posted " + name);
                                             console.log(result);
                                         },
                                         error: function (xmlhttprequest, textstatus, errorthrown) {
@@ -224,6 +231,8 @@
 </head>
 <body>
     <div class="holder">
+        <label for="firstname">First Name </label><textarea id="firstname" rows="1" cols="25"></textarea>
+        <label for="lastname">Last  Name </label><textarea id="lastname" rows="1" cols="25"></textarea>
         <div data-role="controls">
             <button>Record</button>
         </div>
