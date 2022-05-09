@@ -33,11 +33,13 @@ namespace VoiceRecorder
     public static string Upload(string name, string encodedBlob)
     {
       try {
+        System.Diagnostics.Debug.WriteLine(DateTime.Now.ToString() +" | Received: " + encodedBlob);
         return "name:" + name + ", encodedBlob:" + encodedBlob;
-        //return "test";
+        
       }
       catch (Exception ex) { 
-        return ex.ToString();
+        System.Diagnostics.Debug.WriteLine(ex.Message);
+        return ex.Message;
       }
     }
 
