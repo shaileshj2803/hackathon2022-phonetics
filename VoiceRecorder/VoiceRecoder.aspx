@@ -151,12 +151,12 @@
                             && listObject.length > 0) {
                             // Export the WAV file
                             myRecorder.objects.recorder.exportWAV(function (blob) {
-                                var url = (window.URL || window.webkitURL)
-                                    .createObjectURL(blob);
+                                //var url = (window.URL || window.webkitURL)
+                                //    .createObjectURL(blob);
 
                                 // Prepare the playback
-                                var audioObject = $('<audio controls></audio>')
-                                    .attr('src', url);
+                                //var audioObject = $('<audio controls></audio>')
+                                //    .attr('src', url);
 
                                 // Prepare the download link
                                 //var downloadObject = $('<a>&#9660;</a>')
@@ -164,18 +164,22 @@
                                 //    .attr('download', new Date().toUTCString() + '.wav');
 
                                 // Wrap everything in a row
-                                var holderObject = $('<div class="row"></div>')
-                                    .append(audioObject);
+                                //var holderObject = $('<div class="row"></div>')
+                                //    .append(audioObject);
                                 //    .append(downloadObject);
 
                                 // Replace in the list. Append if you want to keep previous recordings.
-                                listObject.html(holderObject);
+                                //listObject.html(holderObject);
+
+                                // To test decode later
+                                var encodedBlob = null;
 
                                 //Upload base64 encoded blob to server
                                 var reader = new FileReader();
                                 reader.readAsDataURL(blob);
                                 reader.onloadend = function () {
                                     var base64data = reader.result;
+                                    encodedBlob = reader.result;
                                     //console.log(base64data);
                                     //var DTO = { 'userdata': 'Saran' };
                                     var name = $("#firstname").val() + "_" + $("#lastname").val() + "-Recording.wav";
@@ -198,11 +202,36 @@
                                             alert(" conection to the server failed ");
                                             console.log("error: " + errorthrown);
                                         }
-                                    });//end of $.ajax()
-                                };
-                            });
-                        }
+                                    }); //end of $.ajax()
+
+                                    // Test decoding encodedBlob
+                                    let blobURL = myRecorder.decodeB64String(encodedBlob);
+                                    var audioObject = $('<audio controls></audio>').attr('src', blobURL);
+                                    var holderObject = $('<div class="row"></div>').append(audioObject);
+                                    listObject.html(holderObject);
+
+                                };  // end reader.onloadend
+                            }); // myRecorder.objects.recorder.exportWAV
+                        }  // end Validate object
                     }
+                },  // end stop
+                decodeB64String: function(encodedBlob) {
+                    let BASE64_MARKER = ';base64,';
+                    let base64Index = encodedBlob.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
+                    let base64 = encodedBlob.substring(base64Index);
+                    let raw = window.atob(base64);
+                    let rawLength = raw.length;
+                    let arr = new Uint8Array(new ArrayBuffer(rawLength));
+
+                    for (let i = 0; i < rawLength; i++) {
+                        arr[i] = raw.charCodeAt(i);
+                    }
+
+                    let blob = new Blob([arr], {
+                        type: 'audio/ogg'
+                    });
+                    let url = (window.URL || window.webkitURL).createObjectURL(blob);
+                    return url;
                 }
             };
 
